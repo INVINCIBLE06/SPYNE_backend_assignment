@@ -15,14 +15,7 @@ const isValidUserIdInTheParams = (collection) => async (req, res, next) => {
         } else {
             let data;
             let errorMessage;
-            if(collection === "Candidate") {
-                data = await User.findOne({ candidate: req.params?.id });
-            } else if (collection === "Question") {
-                data = await Question.findOne({ _id: req.params?.id });
-                errorMessage = "Question not found with the provided params id"
-            } else {
-                data = await User.findOne({ _id: req.params?.id });
-            }
+            data = await User.findOne({ _id: req.params?.id })
             if (!data) 
             {
                 return res.status(400).send({
