@@ -2,12 +2,12 @@ import mongoose, { Schema } from 'mongoose';
 
 const likeSchema = new mongoose.Schema(
     {
-        user: {
+        userId: {
             type: mongoose.Schema.Types.ObjectId,
             ref: 'User', // Reference to the User model
             required: true,
         },
-        discussion: {
+        postId: {
             type: mongoose.Schema.Types.ObjectId,
             ref: 'Discussion', // Reference to the Discussion model
             required: true,

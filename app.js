@@ -2,7 +2,7 @@ import express from 'express';
 import { createDbConnection } from './config/db.config.js';
 import cors from "cors";
 import userRoutes from "./Services/user/user.routes.js";
-import discussionRoutes from "./Services/discussion/discussion.routes.js";
+import discussionRoutes from "./Services/post/post.routes.js";
 import authRoutes from "./Services/auth/auth.routes.js";
 import interactionRoutes from "./Services/interaction/interaction.routes.js";
 import fileUpload from "express-fileupload";

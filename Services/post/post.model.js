@@ -2,7 +2,7 @@
 import mongoose, { Schema } from 'mongoose';
 import constants from '../../utils/constants.js';
 
-const discussionSchema = new mongoose.Schema(
+const postSchema = new mongoose.Schema(
     {
         text: {
             type: String,
@@ -31,10 +31,14 @@ const discussionSchema = new mongoose.Schema(
             enum: [constants.status.active, constants.status.inactive],
             default: constants.status.active,
         },
+        viewCount: { 
+            type: Number, 
+            default: 0 
+        },
     },
     {
         timestamps: true
     }
 );
 
-export default mongoose.model('Discussion', discussionSchema);
+export default mongoose.model('Post', postSchema);

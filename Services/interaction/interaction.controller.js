@@ -1,14 +1,15 @@
-import Discussion from '../discussion/discussion.model.js';
+import Post from '../post/post.model.js';
 import Like from './like.model.js';
 import Comment from './comment.model.js';
+import Reply from './reply.model.js';
 
 // Like a post
 export const like = async (req, res) => {
     try {
-        const { userId, discussionId } = req.body;
+        const { userId, postId } = req.body;
 
         // Check if the user has already liked the post
-        const existingLike = await Like.findOne({ user: userId, discussion: discussionId });
+        const existingLike = await Like.findOne({ userId: userId, postId: postId });
         if (existingLike) {
             return res.status(400).json({
                 status: false,
@@ -18,31 +19,31 @@ export const like = async (req, res) => {
 
         // Create a new Like object
         const like = new Like({
-            user: userId,
-            discussion: discussionId,
+            userId: userId,
+            postId: postId,
         });
 
         // Save the like to the database
         await like.save();
 
-        // Add the like to the discussion's likes array
-        const discussion = await Discussion.findByIdAndUpdate(
-            discussionId,
+        // Add the like to the post's likes array
+        const post = await Post.findByIdAndUpdate(
+            postId,
             { $push: { likes: like._id }, $inc: { likeCount: 1 } },
             { new: true }
         );
 
-        if (!discussion) {
+        if (!post) {
             return res.status(404).json({
                 status: false,
-                message: 'Discussion not found',
+                message: 'Post not found',
             });
         }
 
         return res.status(201).json({
             status: true,
             message: 'Post liked successfully',
-            discussion,
+            post,
         });
     } catch (error) {
         console.error('Error liking post:', error);
@@ -56,15 +57,15 @@ export const like = async (req, res) => {
 
 // Unlike a post
 export const unlikeDiscussion = async (req, res) => {
-    const { userId, discussionId } = req.body;
+    const { userId, postId } = req.body;
     try {
         // Find the like entry to be removed
-        const like = await Like.findOne({ user: userId, discussion: discussionId });
+        const like = await Like.findOne({ userId: userId, postId: postId });
 
         if (!like) {
             return res.status(404).json({
                 status: false,
-                message: 'Like not found for this discussion',
+                message: 'Like not found for this post',
             });
         }
 
@@ -72,27 +73,27 @@ export const unlikeDiscussion = async (req, res) => {
         await Like.deleteOne({ _id: like._id });
         console.log('Like removed successfully!');
 
-        // Update the discussion's like count
-        const discussion = await Discussion.findByIdAndUpdate(
-            discussionId,
+        // Update the post's like count
+        const post = await Post.findByIdAndUpdate(
+            postId,
             { $pull: { likes: like._id }, $inc: { likeCount: -1 } },
             { new: true }
         );
 
-        if (!discussion) {
+        if (!post) {
             return res.status(404).json({
                 status: false,
-                message: 'Discussion not found',
+                message: 'Post not found',
             });
         }
 
         return res.status(200).json({
             status: true,
-            message: 'Discussion unliked successfully',
-            discussion,
+            message: 'Post unliked successfully',
+            post,
         });
     } catch (error) {
-        console.error('Error unliking discussion:', error);
+        console.error('Error unliking post:', error);
         return res.status(500).json({
             status: false,
             message: 'Internal server error',
@@ -101,24 +102,23 @@ export const unlikeDiscussion = async (req, res) => {
     }
 };
 
-
 // Comment on a post
 export const comment = async (req, res) => {
     try {
-        const { userId, discussionId, text } = req.body;
+        const { userId, postId, text } = req.body;
         // Create a new Comment object
         const newComment = new Comment({
-            user: userId,
-            discussion: discussionId,
+            userId: userId,
+            postId: postId,
             text: text,
         });
 
         // Save the comment to the database
         await newComment.save();
 
-        // Update the discussion with the new comment
-        await Discussion.findByIdAndUpdate(
-            discussionId,
+        // Update the post with the new comment
+        await Post.findByIdAndUpdate(
+            postId,
             { $push: { comments: newComment._id } },
             { new: true }
         );
@@ -190,6 +190,51 @@ export const deleteComment = async (req, res) => {
         res.status(400).json({
             status: false,
             message: 'Failed to delete comment',
+            error: error.message,
+        });
+    }
+};
+
+// Create Reply
+export const createReply = async (req, res) => 
+{
+    try 
+    {
+        const { userId, commentId, text } = req.body;
+        
+        // Check if the comment exists
+        const comment = await Comment.findById(commentId);
+        if (!comment) {
+            return res.status(404).json({
+                status: false,
+                message: 'Comment not found',
+            });
+        }
+
+        // Create a new Reply object
+        const reply = new Reply({
+            user: userId,
+            comment: commentId,
+            text,
+        });
+
+        // Save the reply to the database
+        await reply.save();
+
+        // Optionally, update the comment to add the reply to its replies array
+        comment.replies?.push(reply._id);
+        await comment.save();
+
+        res.status(201).json({
+            status: true,
+            message: 'Reply created successfully',
+            reply,
+        });
+    } catch (error) {
+        console.error('Error creating reply:', error);
+        res.status(500).json({
+            status: false,
+            message: 'Internal server error',
             error: error.message,
         });
     }
