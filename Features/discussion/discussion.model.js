@@ -6,7 +6,6 @@ const discussionSchema = new mongoose.Schema(
         text: 
         { 
             type: String, 
-            required: true 
         },
         image: 
         { 
@@ -21,7 +20,7 @@ const discussionSchema = new mongoose.Schema(
             type: Date, 
             default: Date.now 
         },
-        userId: 
+        createdBy: 
         { 
             type: mongoose.Schema.Types.ObjectId, 
             ref: 'User', 

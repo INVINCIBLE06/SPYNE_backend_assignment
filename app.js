@@ -5,12 +5,16 @@ import userRoutes from "./Features/user/user.routes.js";
 import discussionRoutes from "./Features/discussion/discussion.routes.js";
 import authRoutes from "./Features/auth/auth.routes.js";
 import interactionRoutes from "./Features/interaction/interaction.routes.js";
+import fileUpload from "express-fileupload";
+import { fileURLToPath } from 'url';
+import { dirname } from 'path';
 
 
 const app = express();
 createDbConnection();
 app.use(cors());
 app.use(express.json());
+app.use(fileUpload());
 app.use('/api', userRoutes);
 app.use('/api', discussionRoutes);
 app.use('/api', authRoutes);

@@ -1,13 +1,42 @@
+import { fileUpload } from "../../utils/helper.js";
 import Discussion  from "./discussion.model.js";
 
 
 // Create Discussion
 export const createDiscussion = async (req, res) => {
     try {
-        const discussion = new Discussion(req.body);
+        const { text, hashtags } = req.body;
+        let imageUrl = null;
+        
+        // Check if image file is uploaded
+        if (req.files && req.files.image_post) {
+            const image_post = req.files.image_post;
+            const uploadPost = await file
+            Upload(image_post);
+
+            if (uploadPost === 'INVALIDFORMAT' || uploadPost === 'NOATTACHEMENT') {
+                imageUrl = null;
+            } else {
+                imageUrl = uploadPost;
+            }
+        }
+
+        // Create a new Discussion object
+        const discussion = new Discussion({
+            text: text,
+            image: imageUrl,
+            hashtags: hashtags,
+            createdBy: req.params.id,
+        });
+
+        // Save discussion to the database
         await discussion.save();
+
+        // Send success response
         res.status(201).send(discussion);
     } catch (error) {
+        // Handle errors
+        console.error("Error creating discussion:", error);
         res.status(400).send(error);
     }
 };
