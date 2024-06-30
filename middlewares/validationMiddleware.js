@@ -116,16 +116,10 @@ export async function emailValidation(req, res, next) {
     }
 }
 
+// The below funnction is for checing the dupliation email
 export async function checkDuplicateEmail(req, res, next){
     const { id } = req.params;
     const { email } = req.body; // Assuming you have id and email in the request body
-    
-    if (!isvalidEmail(email)) {
-        return res.status(400).json({
-            status: false,
-            error: `Incorrect email format`
-        });
-    }
 
     // Check if email is provided and validate format
      
@@ -166,6 +160,7 @@ export async function checkDuplicateEmail(req, res, next){
     }
 };
 
+// The below funnction is for checing the dupliation mobile number
 export async function checkDuplicateMobileNo(req, res, next){
     const { id } = req.params;
     const { mobile } = req.body; // Assuming you have id and email in the request body

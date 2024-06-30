@@ -40,12 +40,8 @@ const userSchema = new mongoose.Schema(
         { 
             type: String, 
             enum: [`${constants.status.active}`, `${constants.status.inactive}`], 
-            default: 'constants.status.active' 
-        },
-        deletedAt: 
-        { 
-            type: Date 
-        },
+            default: constants.status.active 
+        }
     },
     {
         timestamps: true

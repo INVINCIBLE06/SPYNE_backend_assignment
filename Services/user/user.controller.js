@@ -1,9 +1,16 @@
 import constants from "../../utils/constants.js";
+import bcrypt from 'bcryptjs';
 import User from "./user.model.js"
 
 // Update User  
 export const updateUser = async (req, res) => {
     try {
+        if(req.body.password) {
+            return res.status(200).send({
+                status : true,
+                message: "Password cannot be updated. There is seperate option to update password."
+            });
+        }
         const user = await User.findByIdAndUpdate(req.params.id, req.body, { new: true, runValidators: true });
         return res.status(200).send({
             status : true,
@@ -214,6 +221,48 @@ export const unfollowUser = async (req, res) => {
         res.status(500).json({
             status: false,
             message: "Internal server error"
+        });
+    }
+};
+
+// The below function is for updating the password
+export const updateUserPassword = async (req, res) => {
+    try {
+        const userId = req.params.id
+        const { currentPassword, newPassword } = req.body;
+
+        // Retrieve the user from the database
+        const user = await User.findById(userId);
+        if (!user) {
+            return res.status(404).json({
+                status: false,
+                message: 'User not found',
+            });
+        }
+
+        // Check if the current password matches
+        const isMatch = await user.matchPassword(currentPassword);
+        if (!isMatch) {
+            return res.status(400).json({
+                status: false,
+                message: 'Current password is incorrect',
+            });
+        }
+
+        // Update the user's password
+        user.password = newPassword;
+        await user.save();
+
+        return res.status(200).json({
+            status: true,
+            message: 'Password updated successfully',
+        });
+    } catch (error) {
+        console.error('Error updating password:', error);
+        return res.status(500).json({
+            status: false,
+            message: 'Internal server error',
+            error: error.message,
         });
     }
 };

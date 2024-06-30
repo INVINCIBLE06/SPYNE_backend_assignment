@@ -7,9 +7,10 @@
 
 import jwt from 'jsonwebtoken';
 
+
+// The below function is for decoding the jwt token
 export const auth = (req, res, next) => {
     const token = req.header('Authorization');
-    console.log(process.env.SECRET_KEY);  
     if (!token) {
         return res.status(401).json({ message: 'Access Denied' });
     }

@@ -1,5 +1,5 @@
 import express from 'express';
-import { deleteUser, followUser, getParticularUser, listUsers, searchUser, unfollowUser, updateUser }  from "./user.controller.js"
+import { deleteUser, followUser, getParticularUser, listUsers, searchUser, unfollowUser, updateUser, updateUserPassword }  from "./user.controller.js"
 import { checkDuplicateEmail, checkDuplicateMobileNo, emailValidation, passwordValidation } from '../../middlewares/validationMiddleware.js';
 import { auth } from '../../middlewares/authMiddleware.js';
 import isValidUserIdInTheParams from '../../middlewares/verifyParams.js';
@@ -7,7 +7,7 @@ import isValidUserIdInTheParams from '../../middlewares/verifyParams.js';
 const router = express.Router();
 
 // The bellow route is for updating the details of user
-router.put('/users/:id', auth, checkDuplicateEmail, checkDuplicateMobileNo, passwordValidation, updateUser);
+router.put('/users/:id', auth, checkDuplicateEmail, checkDuplicateMobileNo, updateUser);
 
 // The below route for fethcing the particualr user details
 router.get('/user/:id', isValidUserIdInTheParams("User"), auth, getParticularUser);
@@ -26,5 +26,8 @@ router.post('/user/follow/:id', isValidUserIdInTheParams("User"), auth, followUs
 
 // The below route is for unfollowing the other user
 router.delete('/user/unfollow/:id', isValidUserIdInTheParams("User"), auth, unfollowUser);
+
+router.put('/user/changePassword/:id', isValidUserIdInTheParams("User"), auth, updateUserPassword);
+
 
 export default router;

@@ -1,108 +1,12 @@
-import Post from '../post/post.model.js';
-import Like from './like.model.js';
+
+
+
+
 import Comment from './comment.model.js';
 import Reply from './reply.model.js';
+import Post from '../../post/post.model.js';
 
-// Like a post
-export const like = async (req, res) => {
-    try {
-        const { userId, postId } = req.body;
-
-        // Check if the user has already liked the post
-        const existingLike = await Like.findOne({ userId: userId, postId: postId });
-        if (existingLike) {
-            return res.status(400).json({
-                status: false,
-                message: 'You have already liked this post',
-            });
-        }
-
-        // Create a new Like object
-        const like = new Like({
-            userId: userId,
-            postId: postId,
-        });
-
-        // Save the like to the database
-        await like.save();
-
-        // Add the like to the post's likes array
-        const post = await Post.findByIdAndUpdate(
-            postId,
-            { $push: { likes: like._id }, $inc: { likeCount: 1 } },
-            { new: true }
-        );
-
-        if (!post) {
-            return res.status(404).json({
-                status: false,
-                message: 'Post not found',
-            });
-        }
-
-        return res.status(201).json({
-            status: true,
-            message: 'Post liked successfully',
-            post,
-        });
-    } catch (error) {
-        console.error('Error liking post:', error);
-        return res.status(500).json({
-            status: false,
-            message: 'Internal server error',
-            error,
-        });
-    }
-};
-
-// Unlike a post
-export const unlikeDiscussion = async (req, res) => {
-    const { userId, postId } = req.body;
-    try {
-        // Find the like entry to be removed
-        const like = await Like.findOne({ userId: userId, postId: postId });
-
-        if (!like) {
-            return res.status(404).json({
-                status: false,
-                message: 'Like not found for this post',
-            });
-        }
-
-        // Delete the like entry
-        await Like.deleteOne({ _id: like._id });
-        console.log('Like removed successfully!');
-
-        // Update the post's like count
-        const post = await Post.findByIdAndUpdate(
-            postId,
-            { $pull: { likes: like._id }, $inc: { likeCount: -1 } },
-            { new: true }
-        );
-
-        if (!post) {
-            return res.status(404).json({
-                status: false,
-                message: 'Post not found',
-            });
-        }
-
-        return res.status(200).json({
-            status: true,
-            message: 'Post unliked successfully',
-            post,
-        });
-    } catch (error) {
-        console.error('Error unliking post:', error);
-        return res.status(500).json({
-            status: false,
-            message: 'Internal server error',
-            error: error.message,
-        });
-    }
-};
-
-// Comment on a post
+// Below function is for adding a comment
 export const comment = async (req, res) => {
     try {
         const { userId, postId, text } = req.body;
@@ -138,7 +42,7 @@ export const comment = async (req, res) => {
     }
 };
 
-// Update Comment
+//Below function is for updating a comment
 export const updateComment = async (req, res) => {
     const { text } = req.body;
     try {
@@ -170,7 +74,7 @@ export const updateComment = async (req, res) => {
     }
 };
 
-// Delete Comment
+// Below function is for deleting a comment
 export const deleteComment = async (req, res) => {
     try {
         const comment = await Comment.findByIdAndDelete(req.params.id);
@@ -195,7 +99,7 @@ export const deleteComment = async (req, res) => {
     }
 };
 
-// Create Reply
+// Below function is for replying to a comment
 export const createReply = async (req, res) => 
 {
     try 
@@ -213,8 +117,8 @@ export const createReply = async (req, res) =>
 
         // Create a new Reply object
         const reply = new Reply({
-            user: userId,
-            comment: commentId,
+            userId: userId,
+            commentId: commentId,
             text,
         });
 
@@ -232,6 +136,83 @@ export const createReply = async (req, res) =>
         });
     } catch (error) {
         console.error('Error creating reply:', error);
+        res.status(500).json({
+            status: false,
+            message: 'Internal server error',
+            error: error.message,
+        });
+    }
+};
+
+// Below function is for liking a comment
+export const likeComment = async (req, res) => {
+    const { userId, commentId } = req.body;
+    try {
+        // Check if the user has already liked the comment
+        const comment = await Comment.findById(commentId);
+        if (!comment) {
+            return res.status(404).json({
+                status: false,
+                message: 'Comment not found',
+            });
+        }
+
+        if (comment.likes.includes(userId)) {
+            return res.status(400).json({
+                status: false,
+                message: 'You have already liked this comment',
+            });
+        }
+
+        // Add user's ID to likes array
+        comment.likes.push(userId);
+        await comment.save();
+
+        res.status(200).json({
+            status: true,
+            message: 'Comment liked successfully',
+        });
+    } catch (error) {
+        console.error('Error liking comment:', error);
+        res.status(500).json({
+            status: false,
+            message: 'Internal server error',
+            error: error.message,
+        });
+    }
+};
+
+// Below function is for removing the like from a comment
+export const dislikeComment = async (req, res) => {
+    const { userId, commentId } = req.body;
+    try {
+        // Check if the comment exists
+        const comment = await Comment.findById(commentId);
+        if (!comment) {
+            return res.status(404).json({
+                status: false,
+                message: 'Comment not found',
+            });
+        }
+
+        // Check if the user has liked the comment
+        if (!comment.likes.includes(userId)) {
+            return res.status(400).json({
+                status: false,
+                message: 'You have not liked this comment to dislike it',
+            });
+        }
+
+        // Remove user's ID from likes array
+        comment.likes = comment.likes.filter(id => id.toString() !== userId);
+        await comment.save();
+
+        res.status(200).json({
+            status: true,
+            message: 'Comment disliked successfully',
+        });
+    } catch (error) {
+        console.error('Error disliking comment:', error);
         res.status(500).json({
             status: false,
             message: 'Internal server error',
