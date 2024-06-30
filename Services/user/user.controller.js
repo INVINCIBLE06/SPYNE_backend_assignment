@@ -6,7 +6,7 @@ export const updateUser = async (req, res) => {
     try {
         const user = await User.findByIdAndUpdate(req.params.id, req.body, { new: true, runValidators: true });
         return res.status(200).send({
-            status : "true",
+            status : true,
             message: "Details updated successfully"
         });
     } catch (error) {

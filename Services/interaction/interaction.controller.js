@@ -1,14 +1,44 @@
 import Like from "./like.model.js";
 import Comment from "./comment.model.js";
 
-// Like a post or comment
+// Like a post
 export const like = async (req, res) => {
     try {
-        const like = new Like(req.body);
+        const { userId, postId } = req.body;
+
+        // Check if the user has already liked the post
+        const existingLike = await Like.findOne({ user: userId, post: postId });
+        if (existingLike) {
+            return res.status(400).json({
+                status: false,
+                message: 'You have already liked this post',
+            });
+        }
+
+        // Create a new Like object
+        const like = new Like({
+            user: userId,
+            post: postId,
+        });
+
+        // Save the like to the database
         await like.save();
-        res.status(201).send(like);
+
+        // Update the post with the new like
+        await Post.findByIdAndUpdate(postId, { $inc: { likeCount: 1 } });
+
+        res.status(201).json({
+            status: true,
+            message: 'Post liked successfully',
+            like,
+        });
     } catch (error) {
-        res.status(400).send(error);
+        console.error('Error liking post:', error);
+        res.status(500).json({
+            status: false,
+            message: 'Internal server error',
+            error,
+        });
     }
 };
 
