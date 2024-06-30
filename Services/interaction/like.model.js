@@ -2,22 +2,19 @@ import mongoose, { Schema } from 'mongoose';
 
 const likeSchema = new mongoose.Schema(
     {
-        userId: 
-        { 
-            type: mongoose.Schema.Types.ObjectId, 
-            ref: 'User', 
-            required: true 
+        user: {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: 'User', // Reference to the User model
+            required: true,
         },
-        discussionId: 
-        { 
-            type: mongoose.Schema.Types.ObjectId, 
-            ref: 'Discussion', 
-            required: true 
+        discussion: {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: 'Discussion', // Reference to the Discussion model
+            required: true,
         },
-        commentId: 
-        { 
-            type: mongoose.Schema.Types.ObjectId, 
-            ref: 'Comment' 
+        createdAt: {
+            type: Date,
+            default: Date.now,
         },
     },
     {
