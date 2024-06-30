@@ -26,7 +26,6 @@ export const login = async (req, res) => {
   const { email, password } = req.body;
   try {
     const user = await User.findOne({ email });
-    
     if (!user) {
       return res.status(404).json({ 
         code: 404,
@@ -51,7 +50,7 @@ export const login = async (req, res) => {
     });
 
   } catch (error) {
-    console.log(error.message);
+    console.log(error);
     return res.status(400).json({ 
       code: 400,
       message: 'Error logging in', 

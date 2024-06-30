@@ -1,5 +1,6 @@
 import mongoose, { Schema } from 'mongoose';
 import bcrypt from 'bcryptjs';
+import constants from '../../utils/constants.js';
 
 const userSchema = new mongoose.Schema(
     {
@@ -23,7 +24,7 @@ const userSchema = new mongoose.Schema(
         password: 
         { 
             type: String, 
-            required: true 
+            required: true,
         },
         followers: [
         { 
@@ -38,8 +39,8 @@ const userSchema = new mongoose.Schema(
         status: 
         { 
             type: String, 
-            enum: ['ACTIVE', 'INACTIVE'], 
-            default: 'ACTIVE' 
+            enum: [`${constants.status.active}`, `${constants.status.inactive}`], 
+            default: 'constants.status.active' 
         },
         deletedAt: 
         { 

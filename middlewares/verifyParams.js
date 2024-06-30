@@ -1,5 +1,6 @@
 import { createDbConnection } from "../config/db.config.js";
 import User from "../Features/user/user.model.js"
+import constants from "../utils/constants.js";
 
 /**
  * The functiion is for chekcing the params id in the link or api 
@@ -14,7 +15,6 @@ const isValidUserIdInTheParams = (collection) => async (req, res, next) => {
         } else {
             let data;
             let errorMessage;
-            await createDbConnection();
             if(collection === "Candidate") {
                 data = await User.findOne({ candidate: req.params?.id });
             } else if (collection === "Question") {
@@ -26,9 +26,15 @@ const isValidUserIdInTheParams = (collection) => async (req, res, next) => {
             if (!data) 
             {
                 return res.status(400).send({
-                    code: 400,
                     status: false,
                     message: errorMessage ? errorMessage : `User not found with the provided params id`
+                });
+            }
+            if (data?.status === constants.status.inactive) 
+            {
+                return res.status(400).send({
+                    status: false,
+                    message: "Inactive users are not allowed. Please connect with the support teams."
                 });
             }
             next();

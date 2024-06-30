@@ -1,5 +1,4 @@
 import User from "../Features/user/user.model.js"
-import { createDbConnection } from "../config/db.config.js";
 import { checkValueEntered } from "../utils/helper.js";
 
 // Below function will check the create user body
@@ -35,8 +34,8 @@ export async function checkSignInBody(req, res, next) {
 }
 
 // Function to check if the password contains spaces
-const hasSpaces = (password) => {
-    return /\s/.test(password);
+const hasSpaces = (string) => {
+    return /\s/.test(string);
 };
 
 // Function to validate the password against the criteria
@@ -95,7 +94,7 @@ export async function emailValidation(req, res, next) {
             try {
                 const user = await User.findOne({ email: req.body.email });
                 if (user) {
-                    if(req.url === "/user/signin") {
+                    if(req.url === "/auth/login") {
                         next();
                     } else {
                         return res.status(400).json({
@@ -117,34 +116,133 @@ export async function emailValidation(req, res, next) {
     }
 }
 
-const checkDuplicateEmail = async (req, res, next) => {
-    const { id } = req.body;
-    try {
-        if(req.body.email) {
-            const user = await User.findOne({ email });
-            if (user && user._id.toString() !== id) {
-                return res.status(400).json({ errors: [{ msg: 'Email already exists for another user' }] });
-            }
-            next();
-        } else {
-            console.log("Email is not updated this time");
-            next();
+export async function checkDuplicateEmail(req, res, next){
+    const { id } = req.params;
+    const { email } = req.body; // Assuming you have id and email in the request body
+    
+    if (!isvalidEmail(email)) {
+        return res.status(400).json({
+            status: false,
+            error: `Incorrect email format`
+        });
+    }
+
+    // Check if email is provided and validate format
+     
+     if (email) {
+        if (hasSpaces(email)) {
+            return res.status(400).json({
+                status: false,
+                error: `Email cannot contain spaces`
+            });
         }
-        
-    } catch (err) {
-        console.error('Error checking duplicate email:', err);
-        return res.status(500).json({ errors: [{ msg: 'Server error' }] });
+    
+        if (!isvalidEmail(email)) {
+            return res.status(400).json({
+                status: false,
+                error: `Incorrect email format`
+            });
+        }
+    }
+    try {
+        // Check if email already exists in the database (excluding current user's email)
+        if (email) {
+            const userWithSameEmail = await User.findOne({ email });
+            if (userWithSameEmail && userWithSameEmail._id.toString() !== id) {
+                return res.status(400).json({
+                    status: false,
+                    error: 'Email is already in use'
+                });
+            }
+        }
+
+        next(); // Continue to next middleware or route handler
+    } catch (error) {
+        console.error("Error from emailValidation function", error.message);
+        return res.status(500).json({
+            status: false,
+            error: 'Internal server error.'
+        });
+    }
+};
+
+export async function checkDuplicateMobileNo(req, res, next){
+    const { id } = req.params;
+    const { mobile } = req.body; // Assuming you have id and email in the request body
+     
+    // Check if email is provided and validate format
+     
+     if (mobile) {
+        if (hasSpaces(mobile)) {
+            return res.status(400).json({
+                status: false,
+                error: `Mobile no cannot contain spaces`
+            });
+        }
+
+        if (!/^\d{10}$/.test(mobile)) {
+            return res.status(400).json({
+                status: false,
+                error: 'Mobile number must be a 10-digit number'
+            });
+        }   
+       
+    }
+    try {
+        // Check if email already exists in the database (excluding current user's email)
+        if (mobile) {
+            const userWithSameMobileNo = await User.findOne({ mobile });
+            if (userWithSameMobileNo && userWithSameMobileNo._id.toString() !== id) {
+                return res.status(400).json({
+                    status: false,
+                    error: 'Someone is already registered with this mobile number'
+                });
+            }
+        }
+
+        next(); // Continue to next middleware or route handler
+    } catch (error) {
+        console.error("Error from emailValidation function", error.message);
+        return res.status(500).json({
+            status: false,
+            error: 'Internal server error.'
+        });
     }
 };
 
 // Middleware to validate mobile number format
 export async function validateMobileNumber (req, res, next) {
     const { mobile } = req.body;
+    if(hasSpaces(mobile) === true)
+    {
+        return res.status(400).json({
+            status: false,
+            error: `Mobile number have spaces`
+        });
+    }
+
     if (!/^\d{10}$/.test(mobile)) {
         return res.status(400).json({
             status: false,
             error: 'Mobile number must be a 10-digit number'
         });
     }
-    next();
+    try {
+        const user = await User.findOne({ mobile: req.body.mobile });
+        if (user) {
+            return res.status(400).json({
+                status: false,
+                error: 'This mobile number is alredy inn use'
+            });
+        } else {
+            next();
+        }
+    
+    } catch (error) {
+        console.error("Error from validateMobileNumber function", error.message);
+        return res.status(500).json({
+            status: false,
+            error: 'Internal server error.'
+        });
+    }
 };
