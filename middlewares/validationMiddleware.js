@@ -1,4 +1,4 @@
-import User from "../Features/user/user.model.js"
+import User from "../Services/user/user.model.js"
 import { checkValueEntered } from "../utils/helper.js";
 
 // Below function will check the create user body

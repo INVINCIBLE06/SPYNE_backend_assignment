@@ -1,5 +1,5 @@
 import { createDbConnection } from "../config/db.config.js";
-import User from "../Features/user/user.model.js"
+import User from "../Services/user/user.model.js"
 import constants from "../utils/constants.js";
 
 /**

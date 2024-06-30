@@ -1,10 +1,10 @@
 import express from 'express';
 import { createDbConnection } from './config/db.config.js';
 import cors from "cors";
-import userRoutes from "./Features/user/user.routes.js";
-import discussionRoutes from "./Features/discussion/discussion.routes.js";
-import authRoutes from "./Features/auth/auth.routes.js";
-import interactionRoutes from "./Features/interaction/interaction.routes.js";
+import userRoutes from "./Services/user/user.routes.js";
+import discussionRoutes from "./Services/discussion/discussion.routes.js";
+import authRoutes from "./Services/auth/auth.routes.js";
+import interactionRoutes from "./Services/interaction/interaction.routes.js";
 import fileUpload from "express-fileupload";
 import { fileURLToPath } from 'url';
 import { dirname } from 'path';
