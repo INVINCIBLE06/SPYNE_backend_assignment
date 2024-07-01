@@ -1,6 +1,15 @@
+///////////////////////////////////////////////////////////
+//                                                       //
+//      This file is routes file. Where all the          // 
+//      endpoints of the users are written.              //
+//                                                       //
+///////////////////////////////////////////////////////////
+
+
+
 import express from 'express';
 import { deleteUser, followUser, getParticularUser, listUsers, searchUser, unfollowUser, updateUser, updateUserPassword }  from "./user.controller.js"
-import { checkDuplicateEmail, checkDuplicateMobileNo, emailValidation, passwordValidation } from '../../middlewares/validationMiddleware.js';
+import { checkDuplicateEmail, checkDuplicateMobileNo } from '../../middlewares/validationMiddleware.js';
 import { auth } from '../../middlewares/authMiddleware.js';
 import isValidUserIdInTheParams from '../../middlewares/verifyParams.js';
 
@@ -25,7 +34,7 @@ router.get('/users/search', searchUser);
 router.post('/user/follow/:id', isValidUserIdInTheParams("User"), auth, followUser);
 
 // The below route is for unfollowing the other user
-router.delete('/user/unfollow/:id', isValidUserIdInTheParams("User"), auth, unfollowUser);
+router.put('/user/unfollow/:id', isValidUserIdInTheParams("User"), auth, unfollowUser);
 
 router.put('/user/changePassword/:id', isValidUserIdInTheParams("User"), auth, updateUserPassword);
 

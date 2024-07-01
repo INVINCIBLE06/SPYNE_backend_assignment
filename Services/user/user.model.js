@@ -1,3 +1,10 @@
+
+///////////////////////////////////////////////////////////
+//                                                       //
+//      This file is for creating the user collection.   //
+//                                                       //
+///////////////////////////////////////////////////////////
+
 import mongoose, { Schema } from 'mongoose';
 import bcrypt from 'bcryptjs';
 import constants from '../../utils/constants.js';
