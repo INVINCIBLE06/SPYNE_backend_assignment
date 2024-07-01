@@ -11,7 +11,7 @@ import express from 'express';
 import { deleteUser, followUser, getParticularUser, listUsers, searchUser, unfollowUser, updateUser, updateUserPassword }  from "./user.controller.js"
 import { checkDuplicateEmail, checkDuplicateMobileNo } from '../../middlewares/validationMiddleware.js';
 import { auth } from '../../middlewares/authMiddleware.js';
-import isValidUserIdInTheParams from '../../middlewares/verifyParams.js';
+import isValidIdInTheParams from '../../middlewares/verifyParams.js';
 
 const router = express.Router();
 
@@ -19,10 +19,10 @@ const router = express.Router();
 router.put('/users/:id', auth, checkDuplicateEmail, checkDuplicateMobileNo, updateUser);
 
 // The below route for fethcing the particualr user details
-router.get('/user/:id', isValidUserIdInTheParams("User"), auth, getParticularUser);
+router.get('/user/:id', isValidIdInTheParams("User"), auth, getParticularUser);
 
 // The below route for fethcing the inactiving a particualr user details
-router.delete('/users/:id', isValidUserIdInTheParams("User"), auth, deleteUser);
+router.delete('/users/:id', isValidIdInTheParams("User"), auth, deleteUser);
 
 // The below user is for listing all the users but after login
 router.get('/users', listUsers);
@@ -31,12 +31,12 @@ router.get('/users', listUsers);
 router.get('/users/search', searchUser);
 
 // The below route is for following the other user
-router.post('/user/follow/:id', isValidUserIdInTheParams("User"), auth, followUser);
+router.post('/user/follow/:id', isValidIdInTheParams("User"), auth, followUser);
 
 // The below route is for unfollowing the other user
-router.put('/user/unfollow/:id', isValidUserIdInTheParams("User"), auth, unfollowUser);
+router.put('/user/unfollow/:id', isValidIdInTheParams("User"), auth, unfollowUser);
 
-router.put('/user/changePassword/:id', isValidUserIdInTheParams("User"), auth, updateUserPassword);
+router.put('/user/changePassword/:id', isValidIdInTheParams("User"), auth, updateUserPassword);
 
 
 export default router;

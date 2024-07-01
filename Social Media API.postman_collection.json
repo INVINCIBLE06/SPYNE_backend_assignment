@@ -489,7 +489,7 @@
 							"apikey": [
 								{
 									"key": "value",
-									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY2ODEzZGRhNDVjOWE1YjZkOTFmY2QyOCIsImlhdCI6MTcxOTc2MjE5NiwiZXhwIjoxNzE5ODQ4NTk2fQ.t9YvrSo-Mrg9twmMzR7H8q6MaeGZuApihv1S0Yuhm8I",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY2ODEzZGRhNDVjOWE1YjZkOTFmY2QyOCIsImlhdCI6MTcxOTgxODEzNCwiZXhwIjoxNzE5OTA0NTM0fQ.6ExppEAxu85F0_d0Dr35HpmB6_M3zmT7gW6faZaowWw",
 									"type": "string"
 								},
 								{
@@ -501,6 +501,15 @@
 						},
 						"method": "PUT",
 						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
 						"url": {
 							"raw": "http://localhost:8000/api/posts/66824a2b41a33fabea2f57f3",
 							"protocol": "http",
@@ -585,6 +594,21 @@
 				{
 					"name": "Get Particular Post",
 					"request": {
+						"auth": {
+							"type": "apikey",
+							"apikey": [
+								{
+									"key": "value",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY2ODEzZGRhNDVjOWE1YjZkOTFmY2QyOCIsImlhdCI6MTcxOTc2MjE5NiwiZXhwIjoxNzE5ODQ4NTk2fQ.t9YvrSo-Mrg9twmMzR7H8q6MaeGZuApihv1S0Yuhm8I",
+									"type": "string"
+								},
+								{
+									"key": "key",
+									"value": "Authorization",
+									"type": "string"
+								}
+							]
+						},
 						"method": "GET",
 						"header": [],
 						"url": {
@@ -606,7 +630,22 @@
 				{
 					"name": "Post Count",
 					"request": {
-						"method": "POST",
+						"auth": {
+							"type": "apikey",
+							"apikey": [
+								{
+									"key": "value",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY2ODEzZGRhNDVjOWE1YjZkOTFmY2QyOCIsImlhdCI6MTcxOTc2MjE5NiwiZXhwIjoxNzE5ODQ4NTk2fQ.t9YvrSo-Mrg9twmMzR7H8q6MaeGZuApihv1S0Yuhm8I",
+									"type": "string"
+								},
+								{
+									"key": "key",
+									"value": "Authorization",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
 						"header": [],
 						"body": {
 							"mode": "raw",
@@ -645,11 +684,26 @@
 						{
 							"name": "Add Comment",
 							"request": {
+								"auth": {
+									"type": "apikey",
+									"apikey": [
+										{
+											"key": "value",
+											"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY2ODEzZGRhNDVjOWE1YjZkOTFmY2QyOCIsImlhdCI6MTcxOTc2MjE5NiwiZXhwIjoxNzE5ODQ4NTk2fQ.t9YvrSo-Mrg9twmMzR7H8q6MaeGZuApihv1S0Yuhm8I",
+											"type": "string"
+										},
+										{
+											"key": "key",
+											"value": "Authorization",
+											"type": "string"
+										}
+									]
+								},
 								"method": "POST",
 								"header": [],
 								"body": {
 									"mode": "raw",
-									"raw": "{\r\n    \"userId\" : \"66813dda45c9a5b6d91fcd28\", \r\n    \"postId\" : \"6681a1099e68d88157d6a2ae\", \r\n    \"text\": \"Good\"\r\n}",
+									"raw": "{\r\n    \"userId\" : \"6681d7868a2364126d48ee5f\", \r\n    \"postId\" : \"6681a1099e68d88157d6a2ae\", \r\n    \"text\": \"Good\"\r\n}",
 									"options": {
 										"raw": {
 											"language": "json"
@@ -674,6 +728,21 @@
 						{
 							"name": "Update Comment",
 							"request": {
+								"auth": {
+									"type": "apikey",
+									"apikey": [
+										{
+											"key": "value",
+											"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY2ODFkNzg2OGEyMzY0MTI2ZDQ4ZWU1ZiIsImlhdCI6MTcxOTgxOTg1OCwiZXhwIjoxNzE5OTA2MjU4fQ.r3ESclV43Hla06D6HtnOBAuXrK5qhLujwTCzQbH5C3E",
+											"type": "string"
+										},
+										{
+											"key": "key",
+											"value": "Authorization",
+											"type": "string"
+										}
+									]
+								},
 								"method": "PUT",
 								"header": [],
 								"body": {
@@ -686,7 +755,7 @@
 									}
 								},
 								"url": {
-									"raw": "http://localhost:8000/api/comments/6681a7d231f02d402ad35773",
+									"raw": "http://localhost:8000/api/comments/668261204c35e4d370d93971",
 									"protocol": "http",
 									"host": [
 										"localhost"
@@ -695,7 +764,7 @@
 									"path": [
 										"api",
 										"comments",
-										"6681a7d231f02d402ad35773"
+										"668261204c35e4d370d93971"
 									]
 								}
 							},
@@ -704,10 +773,25 @@
 						{
 							"name": "Delete Comment",
 							"request": {
-								"method": "DELETE",
+								"auth": {
+									"type": "apikey",
+									"apikey": [
+										{
+											"key": "value",
+											"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY2ODFkNzg2OGEyMzY0MTI2ZDQ4ZWU1ZiIsImlhdCI6MTcxOTgxOTg1OCwiZXhwIjoxNzE5OTA2MjU4fQ.r3ESclV43Hla06D6HtnOBAuXrK5qhLujwTCzQbH5C3E",
+											"type": "string"
+										},
+										{
+											"key": "key",
+											"value": "Authorization",
+											"type": "string"
+										}
+									]
+								},
+								"method": "PUT",
 								"header": [],
 								"url": {
-									"raw": "http://localhost:8000/api/comments/6681a7d231f02d402ad35773",
+									"raw": "http://localhost:8000/api/comment/668261204c35e4d370d93971",
 									"protocol": "http",
 									"host": [
 										"localhost"
@@ -715,8 +799,8 @@
 									"port": "8000",
 									"path": [
 										"api",
-										"comments",
-										"6681a7d231f02d402ad35773"
+										"comment",
+										"668261204c35e4d370d93971"
 									]
 								}
 							},
@@ -725,11 +809,26 @@
 						{
 							"name": "Comment Reply",
 							"request": {
+								"auth": {
+									"type": "apikey",
+									"apikey": [
+										{
+											"key": "value",
+											"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY2ODFkNzg2OGEyMzY0MTI2ZDQ4ZWU1ZiIsImlhdCI6MTcxOTgxOTg1OCwiZXhwIjoxNzE5OTA2MjU4fQ.r3ESclV43Hla06D6HtnOBAuXrK5qhLujwTCzQbH5C3E",
+											"type": "string"
+										},
+										{
+											"key": "key",
+											"value": "Authorization",
+											"type": "string"
+										}
+									]
+								},
 								"method": "POST",
 								"header": [],
 								"body": {
 									"mode": "raw",
-									"raw": "{\r\n    \"userId\" : \"66813dde45c9a5b6d91fcd2c\", \r\n    \"commentId\" : \"6681b05aa06e198164ba90a4\", \r\n    \"text\" : \"I am not. How are you\" \r\n}",
+									"raw": "{\r\n    \"userId\" : \"6681d7868a2364126d48ee5f\", \r\n    \"commentId\" : \"6681b05aa06e198164ba90a4\", \r\n    \"text\" : \"I am not. How are you\" \r\n}",
 									"options": {
 										"raw": {
 											"language": "json"
@@ -754,6 +853,21 @@
 						{
 							"name": "Like Comment",
 							"request": {
+								"auth": {
+									"type": "apikey",
+									"apikey": [
+										{
+											"key": "value",
+											"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY2ODFkNzg2OGEyMzY0MTI2ZDQ4ZWU1ZiIsImlhdCI6MTcxOTgxOTg1OCwiZXhwIjoxNzE5OTA2MjU4fQ.r3ESclV43Hla06D6HtnOBAuXrK5qhLujwTCzQbH5C3E",
+											"type": "string"
+										},
+										{
+											"key": "key",
+											"value": "Authorization",
+											"type": "string"
+										}
+									]
+								},
 								"method": "POST",
 								"header": [],
 								"body": {
@@ -784,6 +898,21 @@
 						{
 							"name": "Unlike Comment",
 							"request": {
+								"auth": {
+									"type": "apikey",
+									"apikey": [
+										{
+											"key": "value",
+											"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY2ODFkNzg2OGEyMzY0MTI2ZDQ4ZWU1ZiIsImlhdCI6MTcxOTgxOTg1OCwiZXhwIjoxNzE5OTA2MjU4fQ.r3ESclV43Hla06D6HtnOBAuXrK5qhLujwTCzQbH5C3E",
+											"type": "string"
+										},
+										{
+											"key": "key",
+											"value": "Authorization",
+											"type": "string"
+										}
+									]
+								},
 								"method": "POST",
 								"header": [],
 								"body": {
@@ -852,7 +981,7 @@
 								"header": [],
 								"body": {
 									"mode": "raw",
-									"raw": "{\r\n    \"userId\" : \"66813dde45c9a5b6d91fcd2c\",\r\n    \"postId\" : \"6681a26b3d3c00a75aa455c9\"\r\n}",
+									"raw": "{\r\n    \"userId\" : \"66813dda45c9a5b6d91fcd28\",\r\n    \"postId\" : \"6681a26b3d3c00a75aa455c9\"\r\n}",
 									"options": {
 										"raw": {
 											"language": "json"

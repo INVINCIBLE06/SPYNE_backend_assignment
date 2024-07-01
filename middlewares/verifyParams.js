@@ -2,12 +2,14 @@ import { createDbConnection } from "../config/db.config.js";
 import User from "../Services/user/user.model.js"
 import constants from "../utils/constants.js";
 import Post from "../Services/post/post.model.js"
+import Comments from "../Services/interaction/comment/comment.model.js"
+
 
 
 /**
  * The functiion is for chekcing the params id in the link or api 
  */
-const isValidUserIdInTheParams = (collection) => async (req, res, next) => {
+const isValidIdInTheParams = (collection) => async (req, res, next) => {
     try {
         if (!req.params.id) {
             return res.status(400).json({
@@ -20,7 +22,12 @@ const isValidUserIdInTheParams = (collection) => async (req, res, next) => {
             if(collection === "Posts") {
                 data = await Post.findOne({ _id: req.params?.id });
                 req.paramsData = data
-            } else {
+            } 
+            if(collection === "Comments") {
+                data = await Comments.findOne({ _id: req.params?.id });
+                req.paramsData = data
+            } 
+            else {
                 data = await User.findOne({ _id: req.params?.id });
                 req.paramsData = data
             }
@@ -28,7 +35,7 @@ const isValidUserIdInTheParams = (collection) => async (req, res, next) => {
             {
                 return res.status(400).send({
                     status: false,
-                    message: errorMessage ? errorMessage : `User not found with the provided params id`
+                    message: errorMessage ? errorMessage : `${collection} not found with the provided params id`
                 });
             }
             if (data?.status === constants.status.inactive) 
@@ -52,4 +59,4 @@ const isValidUserIdInTheParams = (collection) => async (req, res, next) => {
 
 
 
-export default isValidUserIdInTheParams;
+export default isValidIdInTheParams;
