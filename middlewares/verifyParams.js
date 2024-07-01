@@ -1,6 +1,8 @@
 import { createDbConnection } from "../config/db.config.js";
 import User from "../Services/user/user.model.js"
 import constants from "../utils/constants.js";
+import Post from "../Services/post/post.model.js"
+
 
 /**
  * The functiion is for chekcing the params id in the link or api 
@@ -15,7 +17,13 @@ const isValidUserIdInTheParams = (collection) => async (req, res, next) => {
         } else {
             let data;
             let errorMessage;
-            data = await User.findOne({ _id: req.params?.id })
+            if(collection === "Posts") {
+                data = await Post.findOne({ _id: req.params?.id });
+                req.paramsData = data
+            } else {
+                data = await User.findOne({ _id: req.params?.id });
+                req.paramsData = data
+            }
             if (!data) 
             {
                 return res.status(400).send({
