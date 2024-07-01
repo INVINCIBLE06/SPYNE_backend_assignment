@@ -35,7 +35,7 @@ const isValidUserIdInTheParams = (collection) => async (req, res, next) => {
             {
                 return res.status(400).send({
                     status: false,
-                    message: "Inactive users are not allowed. Please connect with the support teams."
+                    message: `Inactive ${collection} are not allowed to change the status. Please connect with the support teams.`
                 });
             }
             next();

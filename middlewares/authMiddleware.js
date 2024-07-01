@@ -19,7 +19,15 @@ export const auth = (req, res, next) => {
         if(verified.id === req.params.id) {
             req.user = verified;
             next();
-        } else {
+        } else if (req.url === `/post/${req.params.id}` && req.method == "PUT" && req.paramsData.createdBy == verified.id ) {
+            req.user = verified;
+            next();
+        }
+        else if(req.url === `/posts/${req.params.id}` && req.method == "PUT" && req.paramsData.createdBy == verified.id) {
+            req.user = verified;
+            next();
+        }
+        else {
             return res.status(401).json({ message: 'Unauthorized user' });
         } 
     } catch (error) {
